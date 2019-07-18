@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source /etc/profile
+source $HOME/.bash_profile
+
+# Set the software environment
+export PROMETEO_ROOT=$HOME/prometeo/
+. $PROMETEO_ROOT/etc/profile
+
+
+# Uncomment to enable wrf-3.9.1
+#export WRF_VERSION=wrf-3.9.1
+#export COMPILER=mvapich2-2.2-pgi-18.5
+
+# Uncomment to enable wrf-4.0.2
+export WRF_VERSION=wrf-4.0.2
+export COMPILER=mvapich2-2.2-pgi-18.7
+
+DATE=$1
+HOUR=$2
+RUN00="00"
+RUN06="06"
+RUN12="12"
+RUN18="18"
+
+WRF_MODEL=wrf5
+HOURS=168
+
+DATEZHOUR=${DATE}Z$HOUR
+echo "$HOSTNAME: $DATEZHOUR data download completed!"
+
+if [ "$HOUR" -eq "$RUN00" ]; then
+  DATEZHOUR=${DATE}Z$HOUR
+  echo "Running workflow..."
+  cd $HOME/dev/yawe/
+  . venv/bin/activate
+  python 2>&1 1>wrf-devel.${DATEZHOUR}.${HOURS}.log wrf-devel.py $DATEZHOUR $HOURS $WRF_MODEL
+else
+  echo "*** HOUR mismatch!! ****"
+  exit 0
+fi

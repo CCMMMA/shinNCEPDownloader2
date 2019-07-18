@@ -1,0 +1,1 @@
+0,10,20,30,40,50 * * * * /home/ccmmma/prometeo/shinNCEPDownloader2/sNCEPder2 2>&1 >>/home/montella/prometeo/shinNCEPDownloader2/sNCEPder2.log
